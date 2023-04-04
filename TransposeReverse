@@ -1,0 +1,37 @@
+Function TransposeReverse(rng As Range) As Variant
+    Dim arr As Variant
+    Dim outArr() As Variant
+    Dim i As Long, j As Long
+    
+    On Error GoTo ErrorHandler
+    
+    arr = rng.Value
+    
+    If IsArray(arr) Then
+        If IsArray(arr(1, 1)) Then
+            ' Two-dimensional array
+            ReDim outArr(LBound(arr, 2) To UBound(arr, 2), LBound(arr, 1) To UBound(arr, 1))
+            
+            For i = UBound(arr, 1) To LBound(arr, 1) Step -1
+                For j = UBound(arr, 2) To LBound(arr, 2) Step -1
+                    outArr(j, UBound(arr, 1) - i + 1) = arr(i, j)
+                Next j
+            Next i
+        Else
+            ' One-dimensional array
+            ReDim outArr(1 To UBound(arr))
+            
+            For i = UBound(arr) To LBound(arr) Step -1
+                outArr(UBound(arr) - i + 1) = arr(i, 1)
+            Next i
+        End If
+    End If
+    
+    TransposeReverse = outArr
+    
+    Exit Function
+    
+ErrorHandler:
+    TransposeReverse = CVErr(xlErrValue)
+End Function
+
